@@ -37,6 +37,7 @@ SRCS = src/main.c \
        src/expansion.c \
        src/status.c \
        src/utils.c \
+       src/utils2.c \
        src/ft_split.c \
        src/free.c
 
