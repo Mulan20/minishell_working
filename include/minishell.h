@@ -87,7 +87,7 @@ int			builtin_exit(t_command *cmd);
 int			builtin_export(t_command *cmd, char ***env);
 int			builtin_unset(t_command *cmd, char ***env);
 int			execute_builtin(t_command *cmd, char ***env);
-void		print_builtin(t_command *cmds, int count);
+
 /* execution */
 int			exec_command(t_command *cmd, char **env);
 int			execute_external(t_command *cmd, char **env);

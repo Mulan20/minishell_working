@@ -20,7 +20,14 @@ SRCS = src/main.c \
        src/lexer.c \
        src/parser.c \
        src/env.c \
-       src/builtins.c \
+       src/builtins/builtin_echo.c \
+       src/builtins/builtin_cd.c \
+       src/builtins/builtin_pwd.c \
+       src/builtins/builtin_env.c \
+       src/builtins/builtin_exit.c \
+       src/builtins/builtin_export.c \
+       src/builtins/builtin_unset.c \
+       src/builtins/builtin_utils.c \
        src/execution.c \
        src/path.c \
        src/fork.c \

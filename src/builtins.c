@@ -65,6 +65,21 @@ int	builtin_exit(t_command *cmd)
 	return (0);
 }
 
+int	builtin_unset(t_command *cmd, char ***env)
+{
+	int	i;
+
+	if (!cmd->args[1])
+		return (0);
+	i = 1;
+	while (cmd->args[i])
+	{
+		remove_env_var(env, cmd->args[i]);
+		i++;
+	}
+	return (0);
+}
+
 // int	builtin_cd(t_command *cmd)
 // {
 // 	char	*path;
@@ -93,6 +108,7 @@ int	builtin_cd(t_command *cmd, char ***env)
 	char	*path;
 	char	old_pwd[1024];
 	char	*old_pwd_ptr;
+	char	new_pwd[1024];
 
 	if (!cmd->args[1] || ft_strcmp(cmd->args[1], "~") == 0)
 	{
@@ -115,31 +131,23 @@ int	builtin_cd(t_command *cmd, char ***env)
 	}
 	else
 		path = cmd->args[1];
-	
-	// Save current directory
 	if (!getcwd(old_pwd, sizeof(old_pwd)))
 	{
 		perror("getcwd");
 		return (1);
 	}
-	
 	if (chdir(path) == -1)
 	{
 		printf("minishell: cd: %s: %s\n", path, strerror(errno));
 		return (1);
 	}
-	
-	// Update environment variables
 	old_pwd_ptr = get_env_value(*env, "PWD");
 	if (old_pwd_ptr)
 		add_or_update_env(env, "OLDPWD", old_pwd_ptr);
 	else
 		add_or_update_env(env, "OLDPWD", old_pwd);
-	
-	char new_pwd[1024];
 	if (getcwd(new_pwd, sizeof(new_pwd)))
 		add_or_update_env(env, "PWD", new_pwd);
-	
 	return (0);
 }
 
@@ -201,21 +209,6 @@ int	builtin_export(t_command *cmd, char ***env)
 			if (!env_var_exists(*env, cmd->args[i]))
 				add_or_update_env(env, cmd->args[i], "");
 		}
-		i++;
-	}
-	return (0);
-}
-
-int	builtin_unset(t_command *cmd, char ***env)
-{
-	int	i;
-
-	if (!cmd->args[1])
-		return (0);
-	i = 1;
-	while (cmd->args[i])
-	{
-		remove_env_var(env, cmd->args[i]);
 		i++;
 	}
 	return (0);
