@@ -32,9 +32,35 @@ static void	process_input(char *input, char ***env, int *last_status)
 	free_tokens(tokens);
 }
 
-int	main(int ac, char **av, char **envp)
+static int	work_sigint(int *last_status)
+{
+	if (g_signal != SIGINT)
+		return (0);
+	g_signal = 0;
+	*last_status = 130;
+	return (1);
+}
+
+static int	read_and_dispatch(char ***env, int *last_status)
 {
 	char	*input;
+
+	input = get_user_input();
+	if (!input)
+		return (0);
+	if (is_empty_input(input))
+	{
+		free(input);
+		return (1);
+	}
+	process_input(input, env, last_status);
+	free(input);
+	g_signal = 0;
+	return (1);
+}
+
+int	main(int ac, char **av, char **envp)
+{
 	char	**env;
 	int		last_status;
 
@@ -47,23 +73,10 @@ int	main(int ac, char **av, char **envp)
 	setup_sig();
 	while (1)
 	{
-		if (g_signal == SIGINT)
-		{
-			g_signal = 0;
-			last_status = 130;
-			continue;
-		}
-		input = get_user_input();
-		if (!input)
-			break ;
-		if (is_empty_input(input))
-		{
-			free(input);
+		if (work_sigint(&last_status))
 			continue ;
-		}
-		process_input(input, &env, &last_status);
-		free(input);
-		g_signal = 0;
+		if (!read_and_dispatch(&env, &last_status))
+			break ;
 	}
 	rl_clear_history();
 	free_env(env);

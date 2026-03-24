@@ -26,32 +26,43 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+static void	free_cmd_args(t_command *cmd)
+{
+	int	j;
+
+	if (!cmd->args)
+		return ;
+	j = 0;
+	while (cmd->args[j])
+	{
+		free(cmd->args[j]);
+		j++;
+	}
+	free(cmd->args);
+	cmd->args = NULL;
+}
+
+static void	free_cmd_redirs(t_command *cmd)
+{
+	free(cmd->infile);
+	free(cmd->outfile);
+	free(cmd->heredoc);
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->heredoc = NULL;
+}
+
 void	free_commands(t_command *cmds, int count)
 {
 	int	i;
-	int	j;
 
 	if (!cmds)
 		return ;
 	i = 0;
 	while (i < count)
 	{
-		if (cmds[i].args)
-		{
-			j = 0;
-			while (cmds[i].args[j])
-			{
-				free(cmds[i].args[j]);
-				j++;
-			}
-			free(cmds[i].args);
-		}
-		if (cmds[i].infile)
-			free(cmds[i].infile);
-		if (cmds[i].outfile)
-			free(cmds[i].outfile);
-		if (cmds[i].heredoc)
-			free(cmds[i].heredoc);
+		free_cmd_args(&cmds[i]);
+		free_cmd_redirs(&cmds[i]);
 		i++;
 	}
 	free(cmds);
