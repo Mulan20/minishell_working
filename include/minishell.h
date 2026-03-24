@@ -72,7 +72,7 @@ char		*get_env_value(char **env, char *var);
 void		add_or_update_env(char ***env, char *var, char *value);
 void		remove_env_var(char ***env, char *var);
 int			env_var_exists(char **env, char *var);
-
+int			get_env_index(char **env, char *var);
 /* builtins */
 int			is_builtin(char *cmd);
 int			builtin_echo(t_command *cmd, char **env, int last_status);

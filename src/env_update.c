@@ -1,23 +1,5 @@
 #include "../include/minishell.h"
 
-static int	get_env_index(char **env, char *var)
-{
-	int	i;
-	int	var_len;
-
-	if (!env || !var)
-		return (-1);
-	var_len = ft_strlen(var);
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], var, var_len) == 0 && env[i][var_len] == '=')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 static char	*make_env_entry(char *var, char *value)
 {
 	char	*new_entry;

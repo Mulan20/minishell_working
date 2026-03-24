@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-static int	get_env_index(char **env, char *var)
+int	get_env_index(char **env, char *var)
 {
 	int	i;
 	int	var_len;
