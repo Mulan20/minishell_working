@@ -18,6 +18,9 @@ RM = rm -f
 SRCS = src/main.c \
        src/input.c \
        src/lexer.c \
+       src/lexer_handlers.c\
+       src/lexer_utils.c\
+       src/lexer_word.c\
        src/parser_count.c \
        src/parser_init.c\
        src/parser_pipe.c\

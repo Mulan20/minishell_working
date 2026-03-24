@@ -56,7 +56,16 @@ char		*get_user_input(void);
 /* lexer.c */
 t_token		*define_token(char *input);
 void		free_tokens(t_token *tokens);
-void		print_tokens(t_token *tokens);
+void	skip_spaces(char *input, int *i);
+int		is_operator(char c);
+t_token	*create_token(t_token_type type, char *value);
+void	add_token(t_token **list, t_token *new);
+// char	*get_token_type(t_token_type type);
+t_token	*handle_pipe(t_token *tokens);
+t_token	*handle_redir_out(t_token *tokens, char *input, int *i);
+t_token	*handle_redir_in(t_token *tokens, char *input, int *i);
+t_token	*handle_word(t_token *tokens, char *input, int *i);
+
 
 /* parser.c */
 int			count_commands(t_token *tokens);
@@ -132,7 +141,7 @@ char		*ft_strdup(char *str);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_substr(char *s, int start, int len);
 char		*ft_strcpy(char *s1, char *s2);
-
+char	*ft_substr(char *s, int start, int len); 
 
 void		init_command(t_command *cmd);
 int			count_word(t_token *tokens);
