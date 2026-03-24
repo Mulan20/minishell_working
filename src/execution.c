@@ -17,7 +17,7 @@ int	exec_command(t_command *cmd, char **env)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	if (is_builtin(cmd->args[0]))
-		return (execute_builtin(cmd, &env));
+		return (execute_builtin(cmd, &env, 0));
 	else
 		return (execute_external(cmd, env));
 }

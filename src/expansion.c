@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/23 12:23:09 by nkham             #+#    #+#             */
-/*   Updated: 2026/03/23 12:23:10 by nkham            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minishell.h"
 
@@ -36,15 +25,16 @@ static char	*get_env_var(char *name, char **envp)
 	return (NULL);
 }
 
-static char	*expand_var(char *name, char **envp)
+static char	*expand_var(char *name, char **envp, int last_status)
 {
 	char	*val;
+	char	*result;
 
 	if (ft_strcmp(name, "?") == 0)
 	{
-		char *result = malloc(20);
+		result = malloc(20);
 		if (result)
-			sprintf(result, "%d", get_last_exit_status());
+			sprintf(result, "%d", last_status);
 		return (result);
 	}
 	val = get_env_var(name, envp);
@@ -53,7 +43,7 @@ static char	*expand_var(char *name, char **envp)
 	return (ft_strdup(""));
 }
 
-char	*expand_string(char *str, char **envp)
+char	*expand_string(char *str, char **envp, int last_status)
 {
 	char	*result;
 	char	*var_name;
@@ -81,13 +71,13 @@ char	*expand_string(char *str, char **envp)
 		{
 			in_single_quote = !in_single_quote;
 			i++;
-			continue;
+			continue ;
 		}
 		else if (str[i] == '"' && !in_single_quote)
 		{
 			in_double_quote = !in_double_quote;
 			i++;
-			continue;
+			continue ;
 		}
 		else if (str[i] == '$' && !in_single_quote && str[i + 1])
 		{
@@ -96,7 +86,7 @@ char	*expand_string(char *str, char **envp)
 			{
 				expanded_var = malloc(20);
 				if (expanded_var)
-					sprintf(expanded_var, "%d", get_last_exit_status());
+					sprintf(expanded_var, "%d", last_status);
 				i++;
 			}
 			else if (is_valid_char(str[i]))
@@ -106,33 +96,28 @@ char	*expand_string(char *str, char **envp)
 					return (NULL);
 				k = 0;
 				while (str[i] && is_valid_char(str[i]) && k < 255)
-				{
 					var_name[k++] = str[i++];
-				}
 				var_name[k] = '\0';
-				expanded_var = expand_var(var_name, envp);
+				expanded_var = expand_var(var_name, envp, last_status);
 				free(var_name);
 			}
 			else
 			{
 				result[j++] = '$';
-				continue;
+				continue ;
 			}
 			if (expanded_var)
 			{
-				int val_len = ft_strlen(expanded_var);
-				if (j + val_len < 4090)
+				if (j + ft_strlen(expanded_var) < 4090)
 				{
 					ft_strcpy(result + j, expanded_var);
-					j += val_len;
+					j += ft_strlen(expanded_var);
 				}
 				free(expanded_var);
 			}
 		}
 		else
-		{
 			result[j++] = str[i++];
-		}
 	}
 	result[j] = '\0';
 	return (result);

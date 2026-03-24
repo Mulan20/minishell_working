@@ -13,7 +13,8 @@ static int	has_n_flag(char **args, int *i)
 	return (has_n);
 }
 
-static void	print_echo_args(t_command *cmd, char **env, int start)
+static void	print_echo_args(t_command *cmd, char **env, int start,
+		int last_status)
 {
 	int		i;
 	int		first;
@@ -25,7 +26,7 @@ static void	print_echo_args(t_command *cmd, char **env, int start)
 	{
 		if (!first)
 			printf(" ");
-		expanded = expand_string(cmd->args[i], env);
+		expanded = expand_string(cmd->args[i], env, last_status);
 		printf("%s", expanded);
 		free(expanded);
 		first = 0;
@@ -33,16 +34,16 @@ static void	print_echo_args(t_command *cmd, char **env, int start)
 	}
 }
 
-int	builtin_echo(t_command *cmd, char **env)
+int	builtin_echo(t_command *cmd, char **env, int last_status)
 {
-	int		i;
-	int		newline;
+	int	i;
+	int	newline;
 
 	i = 1;
 	newline = 1;
 	if (has_n_flag(cmd->args, &i))
 		newline = 0;
-	print_echo_args(cmd, env, i);
+	print_echo_args(cmd, env, i, last_status);
 	if (newline)
 		printf("\n");
 	fflush(stdout);
