@@ -49,7 +49,9 @@ SRCS = src/main.c \
        src/pipe_wait.c \
        src/redirect.c \
        src/signals.c \
-       src/expansion.c \
+       src/expansion1.c \
+       src/expansion_utils.c\
+       src/expansion_scan.c\
        src/utils.c \
        src/utils2.c \
        src/ft_split.c \

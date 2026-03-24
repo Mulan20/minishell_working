@@ -50,6 +50,28 @@ typedef struct	s_fork_ctx
 	char		**env;
 }	t_fork_ctx;
 
+typedef struct s_expand
+{
+	char	*out;
+	char	*str;
+	char	**envp;
+	int		i;
+	int		j;
+	int		sq;
+	int		dq;
+	int		last_status;
+}	t_expand;
+
+/* expansion */
+char	*expand_string(char *str, char **envp, int last_status);
+int		is_valid_char(char c);
+char	*get_env_var(char *name, char **envp);
+char	*expand_status(int last_status);
+char	*expand_var(char *name, char **envp, int last_status);
+
+int		toggle_quotes(char c, int *sq, int *dq);
+int		expand_dollar(t_expand *e);
+
 /* input.c */
 char		*get_user_input(void);
 
@@ -127,8 +149,6 @@ void		handle_heredoc(t_command *cmd);
 /* signals.c */
 void		setup_sig(void);
 
-/* expansion.c */
-char		*expand_string(char *str, char **envp, int last_status);
 
 /* utils */
 char		**ft_split(char const *s, char c);

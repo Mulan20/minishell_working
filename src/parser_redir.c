@@ -7,10 +7,12 @@ t_token	*process_redirection(t_command *cmd, t_token *current)
 	if (current->next->type != WORD)
 		return (current->next);
 	if (current->type == REDIR_IN)
-		return (free(cmd->infile), cmd->infile = ft_strdup(current->next->value),
+		return (free(cmd->infile), 
+			cmd->infile = ft_strdup(current->next->value),
 			current->next);
 	if (current->type == HEREDOC)
-		return (free(cmd->heredoc), cmd->heredoc = ft_strdup(current->next->value),
+		return (free(cmd->heredoc), 
+			cmd->heredoc = ft_strdup(current->next->value),
 			current->next);
 	free(cmd->outfile);
 	cmd->outfile = ft_strdup(current->next->value);
@@ -47,11 +49,7 @@ char	*remove_quotes(char *str)
 }
 void	add_word_arg(t_command *cmd, char *value, int *index)
 {
-	// if (!value)
-	// 	return ;
-	// cmd->args[*index] = ft_strdup(value);
-	// (*index)++;
-    	char	*clean;
+    char	*clean;
 
 	if (!value)
 		return ;
