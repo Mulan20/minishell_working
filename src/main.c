@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 17:33:14 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:33:16 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 volatile sig_atomic_t	g_signal = 0;
@@ -20,7 +32,10 @@ static void	process_input(char *input, char ***env, int *last_status)
 
 	tokens = define_token(input);
 	if (!tokens)
+	{
+		*last_status = 1;
 		return ;
+	}
 	cmd_count = count_commands(tokens);
 	cmds = fill_commands(tokens);
 	if (cmds)

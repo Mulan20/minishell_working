@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 17:37:18 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:37:19 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	is_valid_char(char c)
@@ -26,13 +38,7 @@ char	*get_env_var(char *name, char **envp)
 
 char	*expand_status(int last_status)
 {
-	char	*result;
-
-	result = malloc(20);
-	if (!result)
-		return (NULL);
-	sprintf(result, "%d", last_status);
-	return (result);
+	return (ft_itoa(last_status));
 }
 
 char	*expand_var(char *name, char **envp, int last_status)

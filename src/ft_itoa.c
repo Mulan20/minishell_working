@@ -1,30 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/24 17:29:36 by nkham             #+#    #+#             */
-/*   Updated: 2026/03/24 17:29:38 by nkham            ###   ########.fr       */
+/*   Created: 2026/03/24 17:56:47 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:56:49 by nkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*find_executable(char *cmd, char **env)
+static int	ft_numlen(int n)
 {
-	printf("DBG cmd='%s' len=%d\n", cmd, ft_strlen(cmd));
-	if (!cmd || !cmd[0])
-		return (NULL);
-	if (contain_path(cmd))
+	int	len;
+
+	len = 1;
+	if (n < 0)
+		len++;
+	while (n / 10)
 	{
-		if (access(cmd, F_OK) != 0)
-			return (printf("minishell: %s: No such file or directory\n", cmd),
-				NULL);
-		if (access(cmd, X_OK) != 0)
-			return (printf("minishell: %s: Permission denied\n", cmd), NULL);
-		return (ft_strdup(cmd));
+		len++;
+		n /= 10;
 	}
-	return (find_in_path(cmd, env));
+	return (len);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*str;
+	long	num;
+	int		len;
+
+	num = n;
+	len = ft_numlen(n);
+	str = (char *)malloc(len + 1);
+	if (!str)
+		return (NULL);
+	str[len] = '\0';
+	if (num < 0)
+	{
+		str[0] = '-';
+		num = -num;
+	}
+	if (num == 0)
+		str[0] = '0';
+	while (num > 0)
+	{
+		str[--len] = (num % 10) + '0';
+		num /= 10;
+	}
+	return (str);
 }

@@ -1,16 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 18:39:47 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 18:39:54 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <sys/wait.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <signal.h>
-# include <fcntl.h>
 # include <errno.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -42,12 +54,13 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct	s_fork_ctx
+typedef struct s_fork_ctx
 {
 	t_command	*cmds;
 	int			n;
 	int			(*pipe_fds)[2];
 	char		**env;
+	int			last_status;
 }	t_fork_ctx;
 
 typedef struct s_expand
@@ -63,14 +76,13 @@ typedef struct s_expand
 }	t_expand;
 
 /* expansion */
-char	*expand_string(char *str, char **envp, int last_status);
-int		is_valid_char(char c);
-char	*get_env_var(char *name, char **envp);
-char	*expand_status(int last_status);
-char	*expand_var(char *name, char **envp, int last_status);
-
-int		toggle_quotes(char c, int *sq, int *dq);
-int		expand_dollar(t_expand *e);
+char		*expand_string(char *str, char **envp, int last_status);
+int			is_valid_char(char c);
+char		*get_env_var(char *name, char **envp);
+char		*expand_status(int last_status);
+char		*expand_var(char *name, char **envp, int last_status);
+int			toggle_quotes(char c, int *sq, int *dq);
+int			expand_dollar(t_expand *e);
 
 /* input.c */
 char		*get_user_input(void);
@@ -78,16 +90,14 @@ char		*get_user_input(void);
 /* lexer.c */
 t_token		*define_token(char *input);
 void		free_tokens(t_token *tokens);
-void	skip_spaces(char *input, int *i);
-int		is_operator(char c);
-t_token	*create_token(t_token_type type, char *value);
-void	add_token(t_token **list, t_token *new);
-// char	*get_token_type(t_token_type type);
-t_token	*handle_pipe(t_token *tokens);
-t_token	*handle_redir_out(t_token *tokens, char *input, int *i);
-t_token	*handle_redir_in(t_token *tokens, char *input, int *i);
-t_token	*handle_word(t_token *tokens, char *input, int *i);
-
+void		skip_spaces(char *input, int *i);
+int			is_operator(char c);
+t_token		*create_token(t_token_type type, char *value);
+void		add_token(t_token **list, t_token *new);
+t_token		*handle_pipe(t_token *tokens);
+t_token		*handle_redir_out(t_token *tokens, char *input, int *i);
+t_token		*handle_redir_in(t_token *tokens, char *input, int *i);
+t_token		*handle_word(t_token *tokens, char *input, int *i);
 
 /* parser.c */
 int			count_commands(t_token *tokens);
@@ -104,6 +114,7 @@ void		add_or_update_env(char ***env, char *var, char *value);
 void		remove_env_var(char ***env, char *var);
 int			env_var_exists(char **env, char *var);
 int			get_env_index(char **env, char *var);
+
 /* builtins */
 int			is_builtin(char *cmd);
 int			builtin_echo(t_command *cmd, char **env, int last_status);
@@ -122,24 +133,26 @@ int			fork_execute(char *path, char **args, char **env);
 
 /* path */
 char		*find_executable(char *cmd, char **env);
-char	*get_path(char **env);
-int		contain_path(char *cmd);
-char	*join_path_cmd(char *dir, char *cmd);
-char	*find_in_paths(char **paths, char *cmd);
-char	*find_in_path(char *cmd, char **env);
+char		*get_path(char **env);
+int			contain_path(char *cmd);
+char		*join_path_cmd(char *dir, char *cmd);
+char		*find_in_paths(char **paths, char *cmd);
+char		*find_in_path(char *cmd, char **env);
 
 /* pipe.c */
 void		exec_pipeline(t_command *cmds, int cmd_count, char ***env,
 				int *last_status);
-void	create_pipes(t_command *cmds, int cmd_count, int pipe_fds[][2]);
-void	close_pipes(int cmd_count, int pipe_fds[][2]);
-void	connect_prev(int prev_pipe_fd);
-void	connect_next(int pipe_write_fd);
-void	set_status_from_wait(int status, int *last_status);
-int		exec_command_child(t_command *cmd, char **env);
-pid_t	fork_all(t_command *cmds, int cmd_count, int pipe_fds[][2], char **env);
-void	wait_all(int *last_status, pid_t last_pid);
+void		create_pipes(t_command *cmds, int cmd_count, int pipe_fds[][2]);
+void		close_pipes(int cmd_count, int pipe_fds[][2]);
+void		connect_prev(int prev_pipe_fd);
+void		connect_next(int pipe_write_fd);
+void		set_status_from_wait(int status, int *last_status);
+int			exec_command_child(t_command *cmd, char **env, int last_status);
+// pid_t		fork_all(t_command *cmds, int cmd_count,
+// 				int pipe_fds[][2], char **env);
+pid_t		fork_all(t_fork_ctx *ctx);
 
+void		wait_all(int *last_status, pid_t last_pid);
 
 /* redirect.c */
 void		redirect_input(t_command *cmd);
@@ -148,7 +161,6 @@ void		handle_heredoc(t_command *cmd);
 
 /* signals.c */
 void		setup_sig(void);
-
 
 /* utils */
 char		**ft_split(char const *s, char c);
@@ -161,11 +173,14 @@ char		*ft_strdup(char *str);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_substr(char *s, int start, int len);
 char		*ft_strcpy(char *s1, char *s2);
-char	*ft_substr(char *s, int start, int len); 
 
 void		init_command(t_command *cmd);
 int			count_word(t_token *tokens);
 t_token		*process_redirection(t_command *cmd, t_token *current);
 void		add_word_arg(t_command *cmd, char *value, int *index);
 t_token		*fill_one(t_command *cmd, t_token *tokens);
+
+int			ft_atoi(const char *str);
+char		*ft_itoa(int n);
+
 #endif

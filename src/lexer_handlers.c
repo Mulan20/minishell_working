@@ -1,4 +1,15 @@
-/* header ... */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_handlers.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 17:34:12 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:34:21 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 static t_token	*token_err(t_token *tokens)
@@ -17,8 +28,6 @@ t_token	*handle_pipe(t_token *tokens)
 	add_token(&tokens, new);
 	return (tokens);
 }
-
-
 
 t_token	*handle_redir_out(t_token *tokens, char *input, int *i)
 {

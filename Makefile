@@ -6,7 +6,7 @@
 #    By: nkham <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/23 12:00:00 by nkham             #+#    #+#              #
-#    Updated: 2026/03/23 13:31:25 by nkham            ###   ########.fr        #
+#    Updated: 2026/03/24 18:23:32 by nkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,8 @@ SRCS = src/main.c \
        src/utils.c \
        src/utils2.c \
        src/ft_split.c \
+       src/ft_atoi.c \
+       src/ft_itoa.c \
        src/free.c
 
 OBJS = $(SRCS:.c=.o)

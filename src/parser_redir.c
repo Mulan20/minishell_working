@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_redir.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 17:31:15 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:31:17 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 t_token	*process_redirection(t_command *cmd, t_token *current)
@@ -7,11 +19,11 @@ t_token	*process_redirection(t_command *cmd, t_token *current)
 	if (current->next->type != WORD)
 		return (current->next);
 	if (current->type == REDIR_IN)
-		return (free(cmd->infile), 
+		return (free(cmd->infile),
 			cmd->infile = ft_strdup(current->next->value),
 			current->next);
 	if (current->type == HEREDOC)
-		return (free(cmd->heredoc), 
+		return (free(cmd->heredoc),
 			cmd->heredoc = ft_strdup(current->next->value),
 			current->next);
 	free(cmd->outfile);
@@ -47,15 +59,25 @@ char	*remove_quotes(char *str)
 	}
 	return (ft_strdup(str));
 }
+
+// void	add_word_arg(t_command *cmd, char *value, int *index)
+// {
+// 	char	*clean;
+
+// 	if (!value)
+// 		return ;
+// 	clean = remove_quotes(value);
+// 	if (!clean)
+// 		return ;
+// 	cmd->args[*index] = clean;
+// 	(*index)++;
+// }
 void	add_word_arg(t_command *cmd, char *value, int *index)
 {
-    char	*clean;
-
 	if (!value)
 		return ;
-	clean = remove_quotes(value);
-	if (!clean)
+	cmd->args[*index] = ft_strdup(value);
+	if (!cmd->args[*index])
 		return ;
-	cmd->args[*index] = clean;
 	(*index)++;
 }

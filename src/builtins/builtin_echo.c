@@ -1,14 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 17:07:12 by nkham             #+#    #+#             */
+/*   Updated: 2026/03/24 17:09:08 by nkham            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
+
+// static int	has_n_flag(char **args, int *i)
+// {
+// 	int	has_n;
+
+// 	has_n = 0;
+// 	while (args[*i] && ft_strcmp(args[*i], "-n") == 0)
+// 	{
+// 		has_n = 1;
+// 		(*i)++;
+// 	}
+// 	return (has_n);
+// }
 
 static int	has_n_flag(char **args, int *i)
 {
 	int	has_n;
 
 	has_n = 0;
-	while (args[*i] && ft_strcmp(args[*i], "-n") == 0)
+	while (args[*i])
 	{
-		has_n = 1;
-		(*i)++;
+		if (ft_strcmp(args[*i], "-n") == 0)
+		{
+			has_n = 1;
+			(*i)++;
+		}
+		else if (args[*i][0] == '-' && args[*i][1] == 'n'
+									&& args[*i][2] == '\0')
+		{
+			has_n = 1;
+			(*i)++;
+		}
+		else
+			break ;
 	}
 	return (has_n);
 }
