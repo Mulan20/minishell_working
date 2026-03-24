@@ -1,0 +1,164 @@
+# minishell
+
+A simple shell written in C as part of the 42 **Minishell** project (mandatory part).
+
+Authors:
+- **nkham**
+- **walwin**
+
+---
+
+## Features (Mandatory)
+
+### Prompt + interactive behavior
+- Displays a prompt and waits for input in interactive mode.
+- Command history via `readline` / `add_history`.
+- Behaves like bash for signals in interactive mode:
+  - `Ctrl-C`: interrupts current input and shows a new prompt.
+  - `Ctrl-D`: exits the shell.
+  - `Ctrl-\`: does nothing.
+
+### Executing commands
+- Runs external commands using `execve`.
+- Searches executables using the `PATH` environment variable.
+- Supports absolute and relative paths.
+
+### Pipes
+- Supports pipelines with `|`.
+- Connects stdout of each command to stdin of the next via `pipe` + `dup2`.
+
+### Redirections
+- Input redirection: `< file`
+- Output redirection: `> file`
+- Append output: `>> file`
+- Heredoc: `<< DELIM` (reads until delimiter line)
+
+### Environment variables & expansion
+- Expands environment variables: `$VAR`
+- Expands last exit status: `$?`
+- Quote rules:
+  - Single quotes `'...'` prevent expansion
+  - Double quotes `"..."` allow expansion
+
+### Builtins
+- `echo` (supports `-n`)
+- `cd` (relative/absolute path)
+- `pwd`
+- `export` (no options)
+- `unset` (no options)
+- `env` (no options/args)
+- `exit` (no options)
+
+---
+
+## Build
+
+### Requirements
+- `cc`
+- `make`
+- `readline` development library installed
+
+### Compile
+```sh
+make
+```
+
+### Clean
+```sh
+make clean
+```
+
+### Full clean
+```sh
+make fclean
+```
+
+### Rebuild
+```sh
+make re
+```
+
+---
+
+## Run
+
+```sh
+./minishell
+```
+
+---
+
+## Quick test examples
+
+```sh
+echo hello
+echo hello | wc -c
+echo hi > out
+cat < out
+export X="a b"
+echo "$X"
+echo $?
+```
+
+---
+
+## Notes
+- This project follows the 42 Norm.
+- `readline()` may leak internally; only leaks from our own code are considered errors.
+- This repository targets the **mandatory** requirements; bonus features are not included.
+
+We followed strict implementation process as follows.
+9-Day Implementation Challenges
+Days 1-2: Parsing
+Tokenization and command structure
+
+Quote handling (single/double)
+
+Environment variable expansion
+
+Days 3-4: Built-ins
+echo, cd, pwd, env, export, unset, exit
+
+PATH resolution for external commands
+
+Days 5-6: Execution
+Fork + execve
+
+Process management
+
+Exit status ($?)
+
+Days 7-8: Advanced
+Pipes (|)
+
+Redirections (<, >, >>, <<)
+
+Signal handling (Ctrl-C, Ctrl-D, Ctrl-)
+
+Day 9: Polish
+Memory leaks (valgrind)
+
+Edge cases
+
+Error handling
+
+Most challenging parts:
+
+Parsing with quotes and variables
+
+Pipe and redirection combination
+
+Signal handling
+
+Memory management
+
+PATH resolution order
+
+# Resources
+https://harm-smits.github.io/42docs/projects/minishell
+https://www.youtube.com/watch?v=hMSByvFHOro&list=PLGU1kcPKHMKj5yA0RPb5AK4QAhexmQwrW
+//youtube playlist above is very useful
+
+# AI Usage 
+- AI was being used to figure how the functionality of new functions we haven't encountered before. 
+- AI assisted with debugging methods and theories. 
