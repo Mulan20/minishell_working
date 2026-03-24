@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nkham <marvin@42.fr>                       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/23 11:40:31 by nkham             #+#    #+#             */
-/*   Updated: 2026/03/23 13:34:37 by nkham            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -79,14 +67,14 @@ int			env_var_exists(char **env, char *var);
 
 /* builtins */
 int			is_builtin(char *cmd);
-int			builtin_echo(t_command *cmd, char **env);
+int			builtin_echo(t_command *cmd, char **env, int last_status);
 int			builtin_cd(t_command *cmd, char ***env);
 int			builtin_pwd(void);
 int			builtin_env(char **env);
 int			builtin_exit(t_command *cmd);
 int			builtin_export(t_command *cmd, char ***env);
 int			builtin_unset(t_command *cmd, char ***env);
-int			execute_builtin(t_command *cmd, char ***env);
+int			execute_builtin(t_command *cmd, char ***env, int last_status);
 
 /* execution */
 int			exec_command(t_command *cmd, char **env);
@@ -95,7 +83,8 @@ int			fork_execute(char *path, char **args, char **env);
 char		*find_executable(char *cmd, char **env);
 
 /* pipe.c */
-void		exec_pipeline(t_command *cmds, int cmd_count, char ***env);
+void		exec_pipeline(t_command *cmds, int cmd_count, char ***env,
+				int *last_status);
 
 /* redirect.c */
 void		redirect_input(t_command *cmd);
@@ -106,11 +95,7 @@ void		handle_heredoc(t_command *cmd);
 void		setup_sig(void);
 
 /* expansion.c */
-char		*expand_string(char *str, char **envp);
-
-/* status.c */
-int			get_last_exit_status(void);
-void		set_last_exit_status(int status);
+char		*expand_string(char *str, char **envp, int last_status);
 
 /* utils */
 char		**ft_split(char const *s, char c);
