@@ -60,18 +60,46 @@ void	redirect_output(t_command *cmd)
 	close(fd);
 }
 
-void	handle_heredoc(t_command *cmd)
+// void	handle_heredoc(t_command *cmd)
+// {
+// 	int		pipe_fd[2];
+// 	char	*line;
+
+// 	if (!cmd->heredoc)
+// 		return ;
+// 	if (pipe(pipe_fd) == -1)
+// 	{
+// 		perror("pipe");
+// 		exit(1);
+// 	}
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 			break ;
+// 		if (ft_strcmp(line, cmd->heredoc) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		write(pipe_fd[1], line, ft_strlen(line));
+// 		write(pipe_fd[1], "\n", 1);
+// 		free(line);
+// 	}
+// 	close(pipe_fd[1]);
+// 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+// 	{
+// 		perror("dup2 stdin");
+// 		close(pipe_fd[0]);
+// 		exit(1);
+// 	}
+// 	close(pipe_fd[0]);
+// }
+
+static void	heredoc_write_loop(t_command *cmd, int write_fd)
 {
-	int		pipe_fd[2];
 	char	*line;
 
-	if (!cmd->heredoc)
-		return ;
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
 	while (1)
 	{
 		line = readline("> ");
@@ -82,16 +110,35 @@ void	handle_heredoc(t_command *cmd)
 			free(line);
 			break ;
 		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
+		write(write_fd, line, ft_strlen(line));
+		write(write_fd, "\n", 1);
 		free(line);
 	}
-	close(pipe_fd[1]);
-	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+}
+
+static void	heredoc_dup_stdin(int read_fd)
+{
+	if (dup2(read_fd, STDIN_FILENO) == -1)
 	{
 		perror("dup2 stdin");
-		close(pipe_fd[0]);
+		close(read_fd);
 		exit(1);
 	}
+}
+
+void	handle_heredoc(t_command *cmd)
+{
+	int	pipe_fd[2];
+
+	if (!cmd->heredoc)
+		return ;
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+	heredoc_write_loop(cmd, pipe_fd[1]);
+	close(pipe_fd[1]);
+	heredoc_dup_stdin(pipe_fd[0]);
 	close(pipe_fd[0]);
 }
