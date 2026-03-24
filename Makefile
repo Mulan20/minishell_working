@@ -23,7 +23,10 @@ SRCS = src/main.c \
        src/parser_pipe.c\
        src/parser_redir.c\
        src/parser_refill.c\
-       src/env.c \
+       src/env_copy_free.c \
+       src/env_get.c\
+       src/env_mutate.c\
+       src/env_update.c\
        src/builtins/builtin_echo.c \
        src/builtins/builtin_cd.c \
        src/builtins/builtin_pwd.c \
@@ -39,6 +42,7 @@ SRCS = src/main.c \
        src/pipe.c \
        src/pipe_helpers.c \
        src/pipe_exec.c \
+       src/pipe_exec2.c \
        src/pipe_wait.c \
        src/redirect.c \
        src/signals.c \

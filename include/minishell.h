@@ -42,6 +42,14 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct	s_fork_ctx
+{
+	t_command	*cmds;
+	int			n;
+	int			(*pipe_fds)[2];
+	char		**env;
+}	t_fork_ctx;
+
 /* input.c */
 char		*get_user_input(void);
 
@@ -84,7 +92,7 @@ int			fork_execute(char *path, char **args, char **env);
 /* path */
 char		*find_executable(char *cmd, char **env);
 char	*get_path(char **env);
-int	contain_path(char *cmd);
+int		contain_path(char *cmd);
 char	*join_path_cmd(char *dir, char *cmd);
 char	*find_in_paths(char **paths, char *cmd);
 char	*find_in_path(char *cmd, char **env);
@@ -100,6 +108,7 @@ void	set_status_from_wait(int status, int *last_status);
 int		exec_command_child(t_command *cmd, char **env);
 pid_t	fork_all(t_command *cmds, int cmd_count, int pipe_fds[][2], char **env);
 void	wait_all(int *last_status, pid_t last_pid);
+
 
 /* redirect.c */
 void		redirect_input(t_command *cmd);
