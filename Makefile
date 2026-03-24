@@ -30,6 +30,7 @@ SRCS = src/main.c \
        src/builtins/builtin_utils.c \
        src/execution.c \
        src/path.c \
+       src/path_utils.c \
        src/fork.c \
        src/pipe.c \
        src/redirect.c \

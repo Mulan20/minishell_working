@@ -80,7 +80,14 @@ int			execute_builtin(t_command *cmd, char ***env, int last_status);
 int			exec_command(t_command *cmd, char **env);
 int			execute_external(t_command *cmd, char **env);
 int			fork_execute(char *path, char **args, char **env);
+
+/* path */
 char		*find_executable(char *cmd, char **env);
+char	*get_path(char **env);
+int	contain_path(char *cmd);
+char	*join_path_cmd(char *dir, char *cmd);
+char	*find_in_paths(char **paths, char *cmd);
+char	*find_in_path(char *cmd, char **env);
 
 /* pipe.c */
 void		exec_pipeline(t_command *cmds, int cmd_count, char ***env,
@@ -108,5 +115,5 @@ char		*ft_strdup(char *str);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_substr(char *s, int start, int len);
 char		*ft_strcpy(char *s1, char *s2);
-
+char		*ft_strcat(char *dest, const char *src);
 #endif
