@@ -92,6 +92,14 @@ char	*find_in_path(char *cmd, char **env);
 /* pipe.c */
 void		exec_pipeline(t_command *cmds, int cmd_count, char ***env,
 				int *last_status);
+void	create_pipes(t_command *cmds, int cmd_count, int pipe_fds[][2]);
+void	close_pipes(int cmd_count, int pipe_fds[][2]);
+void	connect_prev(int prev_pipe_fd);
+void	connect_next(int pipe_write_fd);
+void	set_status_from_wait(int status, int *last_status);
+int		exec_command_child(t_command *cmd, char **env);
+pid_t	fork_all(t_command *cmds, int cmd_count, int pipe_fds[][2], char **env);
+void	wait_all(int *last_status, pid_t last_pid);
 
 /* redirect.c */
 void		redirect_input(t_command *cmd);
@@ -115,5 +123,11 @@ char		*ft_strdup(char *str);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_substr(char *s, int start, int len);
 char		*ft_strcpy(char *s1, char *s2);
-char		*ft_strcat(char *dest, const char *src);
+
+
+void		init_command(t_command *cmd);
+int			count_word(t_token *tokens);
+t_token		*process_redirection(t_command *cmd, t_token *current);
+void		add_word_arg(t_command *cmd, char *value, int *index);
+t_token		*fill_one(t_command *cmd, t_token *tokens);
 #endif

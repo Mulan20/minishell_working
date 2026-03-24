@@ -18,7 +18,11 @@ RM = rm -f
 SRCS = src/main.c \
        src/input.c \
        src/lexer.c \
-       src/parser.c \
+       src/parser_count.c \
+       src/parser_init.c\
+       src/parser_pipe.c\
+       src/parser_redir.c\
+       src/parser_refill.c\
        src/env.c \
        src/builtins/builtin_echo.c \
        src/builtins/builtin_cd.c \
@@ -33,6 +37,9 @@ SRCS = src/main.c \
        src/path_utils.c \
        src/fork.c \
        src/pipe.c \
+       src/pipe_helpers.c \
+       src/pipe_exec.c \
+       src/pipe_wait.c \
        src/redirect.c \
        src/signals.c \
        src/expansion.c \
